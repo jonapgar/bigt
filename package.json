@@ -1,0 +1,33 @@
+{
+  "name": "t",
+  "version": "1.0.0",
+  "description": "lightweight simple localization library supporting interfaces, substitution and recursion.",
+  "main": "t.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha tests -R nyan"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jonapgar/t.git"
+  },
+  "keywords": [
+    "i18n",
+    "localization",
+    "internationalization",
+    "translation"
+  ],
+  "author": "Jon Apgar",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/jonapgar/t/issues"
+  },
+  "homepage": "https://github.com/jonapgar/t#readme",
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
