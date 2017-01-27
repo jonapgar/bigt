@@ -6,7 +6,8 @@ require('chai').should()
 describe('Testing translation library t in nodejs',function(){
 	var t;
 	it('Should initialize',function(){
-		t = new (require('./../t.js'))();
+		var T=require('./../bigt.js')
+		t = new T();
 		return t.init({
 			lng:'en',
 			languages:['en','fr'],

@@ -1,14 +1,14 @@
 {
-  "name": "t",
+  "name": "bigt",
   "version": "1.0.0",
   "description": "lightweight simple localization library supporting interfaces, substitution and recursion.",
-  "main": "t.js",
+  "main": "bigt.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha tests -R nyan"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/jonapgar/t.git"
+    "url": "git+ssh://git@github.com/jonapgar/bigt.git"
   },
   "keywords": [
     "i18n",
@@ -19,9 +19,9 @@
   "author": "Jon Apgar",
   "license": "Unlicense",
   "bugs": {
-    "url": "https://github.com/jonapgar/t/issues"
+    "url": "https://github.com/jonapgar/bigt/issues"
   },
-  "homepage": "https://github.com/jonapgar/t#readme",
+  "homepage": "https://github.com/jonapgar/bigt#readme",
   "dependencies": {
     "bluebird": "^3.4.7",
     "lodash": "^4.17.4"
