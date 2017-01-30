@@ -126,12 +126,12 @@
 	}
 
 	u.ready = function(){
-		return this.reload(this.language);
+		return this.setLanguage(this.language);
 	}
-	u.fetch = function(){
+	u.fetch = function(url){
 		
 		var fetch = this.options.fetch;
-		return fetch.apply(this,arguments);
+		return fetch.call(this,url,Promise.resolve);
 	}
 
 	u.lng = u.getLng = u.getLanguage = function getLanguage() {
@@ -154,7 +154,7 @@
 	}
 
 	u.setLanguage = u.setLng = function(lng){
-		return this.load(lng).then(function(data){
+		return this.load(lng).bind(this).then(function(data){
 			this.language = this.options.lng = lng;
 			this.t = this.bind(this.language);	
 			return data;
