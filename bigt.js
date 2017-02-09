@@ -86,7 +86,7 @@
 		sanitizeOptions:function(o){
 			o = o || {};
 			return _.defaults({},o,{
-				forceString:o.returnObjectTrees,
+				forceString:!o.returnObjectTrees,
 				escapeParameters:o.escapeInterpolation,
 			})
 		}
