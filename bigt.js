@@ -62,7 +62,7 @@
 
 	u.defaultRequest = {
 		forceString: true,
-		escapeInterpolation:false,
+		escapeInterpolation:true,
 		defaultValue:undefined,
 	};
 
@@ -71,7 +71,7 @@
 		keyDelimiter:'.',
 		error:console.error,
 		prefix:'ttt_',
-		noEscapePrefix:'HTML',
+		noEscapeSuffix:'HTML',
 		replacer:/\{\{(.*?)\}\}/g,
 		recursor:/\$t\((.*?)\)/g,
 		entityRegex:/[&<>"'\/]/g,
@@ -104,8 +104,8 @@
 		this.languagePromises={};
 		
 
-		if (options.noEscapePrefix)
-			options.noEscapePrefixRegex = options.noEscapePrefixRegex || new RegExp('^' + options.noEscapePrefix);
+		if (options.noEscapeSuffix)
+			options.noEscapeSuffixRegex = options.noEscapeSuffixRegex || new RegExp(options.noEscapeSuffix + '$');
 
 		if (options.storage=='localStorage') {
 			options.storage = ls;
@@ -330,6 +330,8 @@
 
 	u.translate = function translate(lng,k, options) {
 
+		var self = this;
+
 		if (this.options.sanitizeOptions)
 			options = this.options.sanitizeOptions(options);
 
@@ -362,7 +364,7 @@
 		
 		var cache = this.caches[lng];
 		var a = k.split(o.namespaceDelimiter);
-		var defaultNamespace = this.options.defaultNamespace;
+		var defaultNamespace = options.defaultNamespace;
 
 		var ns, namespace,key;
 		
@@ -392,6 +394,34 @@
 
 			v = o.forceString ? (v + '') : v;
 		}
+
+
+
+		var innerOptions = _.clone(originalOptions || {});
+		//dont resupply defaultValue to inner queries 
+		delete innerOptions.defaultValue;
+		
+		//force return string for inner queries
+		innerOptions.forceString = true;
+
+
+		function recursiveReplace(v){
+			return v.replace(o.recursor, function(m, k) {
+
+				if (!k)
+					return ''
+
+				return self.translate(lng,k, innerOptions) + '';
+			});
+		}
+
+		if (_.isPlainObject(v))
+			return (function walk(v){
+				return _.mapValues(v,function(v,k){
+					return _.isPlainObject(v) ? walk(v):_.isString(v) ? recursiveReplace(v):v;
+				})
+			})(v);
+
 		if (!_.isString(v))
 			return v;
 
@@ -404,10 +434,11 @@
 
 					return m
 				}
-				if (esc && o.noEscapePrefix && o.noEscapePrefixRegex.test(k)) {
+				if (esc && o.noEscapeSuffix && o.noEscapeSuffixRegex.test(k)) {
 					var noEscape = true;
-					k = k.substring(0, k.length - o.noEscapePrefix.length);
+					k = k.substring(0, k.length - o.noEscapeSuffix.length);
 				}
+
 				var res = _.get(params, k);
 
 				if (res === undefined) {
@@ -424,27 +455,16 @@
 				return res;
 			});
 		}
-		var innerOptions = _.clone(originalOptions || {});
-		//dont resupply defaultValue to inner queries 
-		delete innerOptions.defaultValue;
 		
-		//force return string for inner queries
-		innerOptions.forceString = true;
 
 
-		var self = this;
-
-		v = v.replace(o.recursor, function(m, k) {
-
-			if (!k)
-				return ''
-
-			return self.translate(lng,k, innerOptions) + '';
-		});
+		
 
 
+		
 
-		return v;
+
+		return recursiveReplace(v);
 
 	}
 	
