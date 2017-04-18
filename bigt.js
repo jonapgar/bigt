@@ -62,7 +62,7 @@
 
 	u.defaultRequest = {
 		forceString: true,
-		escapeInterpolation:true,
+		escapeParameters:true,
 		defaultValue:undefined,
 	};
 
@@ -354,7 +354,7 @@
 		}
 		var originalOptions = _.clone(options);
 		var o = options = _.defaults(options ? _.clone(options) : {}, this.defaultRequest, this.options)
-		var esc = o.escapeInterpolation;
+		var esc = o.escapeParameters;
 	
 		if (!k)
 			return this.returnDefault(options, k);
