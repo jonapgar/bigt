@@ -379,10 +379,10 @@
 		key = a[0].split(o.keyDelimiter);
 		var v = _.get(namespace, key);
 
-		if (v === undefined) {
+		if (v === undefined || v === null) {
 			if (defaultNamespace && ns != defaultNamespace) {
 				v = _.get(cache[defaultNamespace], key);
-				if (v === undefined) {
+				if (v === undefined || v ===null) {
 
 					return this.returnDefault(options, k);
 				}
