@@ -364,24 +364,43 @@
 		
 		var cache = this.caches[lng];
 		var a = k.split(o.namespaceDelimiter);
-		var defaultNamespace = options.defaultNamespace;
+		var defaultNamespaces = options.defaultNamespace;
+		if (!_.isArray(defaultNamespaces)) {
+			defaultNamespaces = [defaultNamespaces]
+		}
 
 		var ns, namespace,key;
 		
 		
 
 		if (a.length == 1)
-			ns = defaultNamespace;
+			ns = defaultNamespaces;
 		else
 			ns = a.shift();
 
-		namespace = cache[ns];
+		if (!_.isArray(ns)) {
+			ns = [ns]
+		}
+
+		namespaces = _.map(ns, function(ans) {
+			return cache[ans]
+		});
 		key = a[0].split(o.keyDelimiter);
-		var v = _.get(namespace, key);
+
+		var v = _(namespaces).map(function(namespace) {
+			return _.get(namespace, key)
+		}).filter(function(value) {
+			return value
+		}).first()
 
 		if (v === undefined || v === null) {
-			if (defaultNamespace && ns != defaultNamespace) {
-				v = _.get(cache[defaultNamespace], key);
+			if (defaultNamespaces && ns != defaultNamespaces) {
+				var v = _(defaultNamespaces).map(function(namespace) {
+					return _.get(cache[namespace], key)
+				}).filter(function(value) {
+					return value
+				}).first()
+
 				if (v === undefined || v ===null) {
 
 					return this.returnDefault(options, k);
