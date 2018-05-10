@@ -390,18 +390,18 @@
 		var v = _(namespaces).map(function(namespace) {
 			return _.get(namespace, key)
 		}).filter(function(value) {
-			return value
+			return value!==undefined && value!==null
 		}).first()
 
-		if (v === undefined || v === null) {
+		if (v === undefined) {
 			if (defaultNamespaces && ns != defaultNamespaces) {
 				var v = _(defaultNamespaces).map(function(namespace) {
 					return _.get(cache[namespace], key)
 				}).filter(function(value) {
-					return value
+					return value!==undefined && value!==null
 				}).first()
 
-				if (v === undefined || v ===null) {
+				if (v === undefined) {
 
 					return this.returnDefault(options, k);
 				}
