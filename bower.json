@@ -1,0 +1,23 @@
+{
+  "name": "bigt",
+  "description": "lightweight simple localization library supporting interfaces, substitution and recursion.",
+  "main": "bigt.js",
+  "authors": [
+    "Jon Apgar"
+  ],
+  "license": "Unlicense",
+  "keywords": [
+    "i18n",
+    "localization",
+    "internationalization",
+    "translation"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
