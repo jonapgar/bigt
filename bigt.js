@@ -24,7 +24,7 @@
 			}
 		} catch (e) {
 
-			o.error('could not get %s from local o.storage', key);
+			console.error('could not get %s from local o.storage', key);
 			res = undefined;
 		}
 		return res;
@@ -35,8 +35,8 @@
 		try {
 			localStorage.setItem(prefix + key, _.isString(data) ? data : JSON.stringify(data));
 		} catch (e) {
-			o.error('could not set %s from local o.storage', key);
-			o.error(e);
+			console.error('could not set %s from local o.storage', key);
+			console.error(e);
 
 		} finally {
 			return data;
@@ -48,8 +48,8 @@
 		try {
 			localStorage.removeItem(prefix + key);
 		} catch (e) {
-			o.error('could not remove %s from local o.storage', key);
-			o.error(e);
+			console.error('could not remove %s from local o.storage', key);
+			console.error(e);
 
 		} finally {
 			return;
