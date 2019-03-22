@@ -463,7 +463,7 @@
 				var res = _.get(params, k);
 
 				if (res === undefined) {
-					if (o.defaultMissingToBlank || (o.defaultUnderscoresToBlank && (k.indexOf('_') === 0)) {
+					if (o.defaultMissingToBlank || (o.defaultUnderscoresToBlank && (k.indexOf('_') === 0))) {
 						return '';
 					}
 					res = m;
