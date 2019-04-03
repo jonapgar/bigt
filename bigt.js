@@ -7,9 +7,9 @@
 		root.bigt = factory(root._,root.Promise);
 	}
 }(this, function(_,Promise) {
-	
 
-	
+
+
 
 	var ls = {};
 	ls.get = function getFromStorage(prefix, key) {
@@ -56,7 +56,7 @@
 		}
 	}
 
-	
+
 
 	var u = {};
 
@@ -83,6 +83,8 @@
 			"'": '&#39;',
 			"/": '&#x2F;'
 		},
+		defaultUnderscoresToBlank: true,
+		defaultMissingToBlank: false,
 		sanitizeOptions:function(o){
 			o = o || {};
 			return _.defaults({},o,{
@@ -92,9 +94,9 @@
 		}
 	}
 
-	
 
-	
+
+
 	u.init = u.initialize = function init(options) {
 
 		this.options = options = _.defaults(options || {}, this.defaultOptions);
@@ -102,7 +104,7 @@
 		this.quickCache={};
 		this.remoteHashes ={};
 		this.languagePromises={};
-		
+
 
 		if (options.noEscapeSuffix)
 			options.noEscapeSuffixRegex = options.noEscapeSuffixRegex || new RegExp(options.noEscapeSuffix + '$');
@@ -121,7 +123,7 @@
 			lng = 'en';
 		}
 		this.language = options.lng = lng;
-		
+
 		return this;
 	}
 
@@ -129,7 +131,7 @@
 		return this.setLanguage(this.language);
 	}
 	u.fetch = function(url){
-		
+
 		var fetch = this.options.fetch;
 		return fetch.call(this,url,Promise.resolve);
 	}
@@ -156,7 +158,7 @@
 	u.setLanguage = u.setLng = function(lng){
 		return this.load(lng).bind(this).then(function(data){
 			this.language = this.options.lng = lng;
-			this.t = this.bind(this.language);	
+			this.t = this.bind(this.language);
 			return data;
 		})
 	}
@@ -164,23 +166,23 @@
 	u.load = function load(lng) {
 
 		lng = lng || this.language;
-		
+
 		var o = this.options,
 			self = this;
 
 
-		
-		
+
+
 		if (lng in this.languagePromises) {
-			
+
 			return this.languagePromises[lng];
 		}
 
 
-		
+
 
 		if (!_.includes(o.languages, lng)) {
-			
+
 			return new Promise(function(resolve,reject){
 
 				reject(new Error('You cant change the language to ' + lng + ', we dont have it'));
@@ -209,7 +211,7 @@
 			o.storage.set('localizationHash_' + lng, this.remoteHashes[lng]);
 			this.reload(lng, cb);
 		}
-		
+
 
 		var hashUrl = o.hashPath.replace(o.replacer, function(m, k) {
 			return params[k];
@@ -219,7 +221,7 @@
 
 			self.fetch(hashUrl).then(function(remoteHash){
 				self.remoteHashes[lng] = remoteHash;
-			
+
 
 
 				var localHash = o.storage.get('localizationHash_' + lng) || {};
@@ -236,7 +238,7 @@
 				})
 
 				o.storage.set('localizationHash_' + lng, remoteHash);
-				
+
 				return self.reload(lng).then(resolve,reject);
 			}).catch(function(err){
 				o.error(err)
@@ -250,23 +252,23 @@
 
 	u.reload = function reload(lng) {
 
-		
+
 
 		var o = this.options,
 			self = this;
 
-		
+
 
 		var cache = this.caches[lng] = this.caches[lng] || {};
 
 
-		
+
 
 		var fetches = [];
 
 		var promises = _.reduce(o.namespaces, function(memo, ns, index, allNs) {
 			memo[ns] = new Promise(function(resolve,reject){
-				
+
 
 				var data = cache[ns] || (o.storage && o.storage.get(lng + '_' + ns));
 
@@ -276,7 +278,7 @@
 					resolve(data);
 					return memo;
 				}
-				
+
 				var params = {
 					lng: lng,
 					ns: ns
@@ -301,16 +303,16 @@
 		var promiseKeys = Object.keys(promises);
 
 		return Promise.all(_.values(promises)).then(function(results){
-		
+
 			_.each(results, function(res, i) {
 
 				cache[promiseKeys[i]] = res;
 			});
 
-			
+
 			return cache;
 		})
-		
+
 
 	}
 	u.returnDefault = function returnDefault(options, k) {
@@ -337,17 +339,17 @@
 
 		if (options && options.lng)
 			lng = options.lng;
-		
+
 		if (!this.caches[lng]) {
 
 			if (this.options.fallbackLanguage) {
 				this.options.error(new Error('Called translate before language has loaded, using fallbackLanguage: ' + this.options.fallbackLanguage))
-				this.caches[lng] = this.caches[this.options.fallbackLanguage]	
+				this.caches[lng] = this.caches[this.options.fallbackLanguage]
 			} else {
 				this.options.error(new Error('Called translate before language has loaded, returning default'));
 				return this.returnDefault(options,k);
 			}
-			//will attempt to load the language requested for next usage. 
+			//will attempt to load the language requested for next usage.
 			this.reload(lng).catch(function(e){
 				o.error(e)
 			});
@@ -355,13 +357,13 @@
 		var originalOptions = _.clone(options);
 		var o = options = _.defaults(options ? _.clone(options) : {}, this.defaultRequest, this.options)
 		var esc = o.escapeParameters;
-	
+
 		if (!k)
 			return this.returnDefault(options, k);
 
-		
 
-		
+
+
 		var cache = this.caches[lng];
 		var a = k.split(o.namespaceDelimiter);
 		var defaultNamespaces = options.defaultNamespace;
@@ -370,8 +372,8 @@
 		}
 
 		var ns, namespace,key;
-		
-		
+
+
 
 		if (a.length == 1)
 			ns = defaultNamespaces;
@@ -417,9 +419,9 @@
 
 
 		var innerOptions = _.clone(originalOptions || {});
-		//dont resupply defaultValue to inner queries 
+		//dont resupply defaultValue to inner queries
 		delete innerOptions.defaultValue;
-		
+
 		//force return string for inner queries
 		innerOptions.forceString = true;
 
@@ -461,7 +463,9 @@
 				var res = _.get(params, k);
 
 				if (res === undefined) {
-
+					if (o.defaultMissingToBlank || (o.defaultUnderscoresToBlank && (k.indexOf('_') === 0))) {
+						return '';
+					}
 					res = m;
 				}
 				res += ''
@@ -474,21 +478,21 @@
 				return res;
 			});
 		}
-		
 
 
-		
 
 
-		
+
+
+
 
 
 		return recursiveReplace(v);
 
 	}
-	
+
 	var c = function() {
-		
+
 	};
 	_.extend(c.prototype, u);
 	return c;
