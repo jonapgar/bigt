@@ -1,6 +1,6 @@
 {
   "name": "bigt",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "lightweight simple localization library supporting interfaces, substitution and recursion.",
   "main": "bigt.js",
   "scripts": {
