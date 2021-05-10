@@ -24,7 +24,7 @@
   "homepage": "https://github.com/jonapgar/bigt#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
-    "lodash": "^3.10.1"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "chai": "^3.5.0",
